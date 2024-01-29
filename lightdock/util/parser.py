@@ -333,6 +333,15 @@ class SetupCommandLineParser(object):
             action="store_true",
             default=False,
         )
+        # Discrete Well
+        parser.add_argument(
+            "--dw",
+            "-dw",
+            help="Use discrete well potential for ligand restraints",
+            dest="discrete_well",
+            action="store_true",
+            default=False,
+        )
         # Version
         parser.add_argument(
             "-V",
