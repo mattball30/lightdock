@@ -342,6 +342,24 @@ class SetupCommandLineParser(object):
             action="store_true",
             default=False,
         )
+        # Well Potential
+        parser.add_argument(
+            "--wp",
+            "-wp",
+            help="Path to the well potential file, if NOT using well_potential_trial.json",
+            dest="path_to_well_potential",
+            type=valid_file,
+            default="",
+        )
+        # Verbose Discrete Well Output
+        parser.add_argument(
+            "--vdw",
+            "-vdw",
+            help="Print the scoring breakdowns of the Discrete Well and DFIRE contributions to the energy per swarm",
+            dest="verbose_discrete_well_output",
+            action="store_true",
+            default=False,
+        )
         # Version
         parser.add_argument(
             "-V",

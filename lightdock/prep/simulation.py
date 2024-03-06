@@ -130,10 +130,12 @@ def calculate_anm(structure, num_nmodes, rmsd, seed, file_name):
     """Calculates ANM for representative structure"""
     original_file_name = structure.structure_file_names[structure.representative_id]
     # We have to use the parsed structure by LightDock
-    parsed_lightdock_structure = Path(original_file_name).parent /(
+    parsed_lightdock_structure = Path(original_file_name).parent / (
         DEFAULT_LIGHTDOCK_PREFIX % Path(original_file_name).name
     )
-    modes = calculate_nmodes(parsed_lightdock_structure, num_nmodes, rmsd, seed, structure)
+    modes = calculate_nmodes(
+        parsed_lightdock_structure, num_nmodes, rmsd, seed, structure
+    )
     structure.n_modes = modes
     write_nmodes(modes, file_name)
     log.info(f"{num_nmodes} normal modes calculated")
@@ -175,7 +177,7 @@ def calculate_starting_positions(
     flip=False,
     swarms_at_fixed_distance=DEFAULT_SWARM_DISTANCE,
     swarms_per_restraint=DEFAULT_SWARMS_PER_RESTRAINT,
-    dense_sampling=False
+    dense_sampling=False,
 ):
     """Defines the starting positions of each glowworm in the simulation.
 
@@ -223,7 +225,8 @@ def calculate_starting_positions(
             log.warning(f"Folder {init_folder} already exists, skipping calculation")
 
         pattern = str(
-            Path(DEFAULT_POSITIONS_FOLDER) / f"{DEFAULT_STARTING_PREFIX}*.dat")
+            Path(DEFAULT_POSITIONS_FOLDER) / f"{DEFAULT_STARTING_PREFIX}*.dat"
+        )
         starting_points_files = glob.glob(pattern)
         for starting_point_file in starting_points_files:
             if not check_starting_file(
@@ -240,16 +243,16 @@ def load_starting_positions(
     swarms, glowworms, use_anm, anm_rec=DEFAULT_NMODES_REC, anm_lig=DEFAULT_NMODES_LIG
 ):
     """Gets the list of starting positions of this simulation"""
-    pattern = str(
-        Path(DEFAULT_POSITIONS_FOLDER) / f"{DEFAULT_STARTING_PREFIX}*.dat"
-    )
+    pattern = str(Path(DEFAULT_POSITIONS_FOLDER) / f"{DEFAULT_STARTING_PREFIX}*.dat")
     starting_points_files = sorted(glob.glob(pattern))
     if len(starting_points_files) != swarms:
         raise LightDockError(
             "The number of initial positions files does not correspond with the number of swarms"
         )
     for swarm_id in range(len(starting_points_files)):
-        starting_point_file = Path(DEFAULT_POSITIONS_FOLDER) / f"{DEFAULT_STARTING_PREFIX}_{swarm_id}.dat"
+        starting_point_file = (
+            Path(DEFAULT_POSITIONS_FOLDER) / f"{DEFAULT_STARTING_PREFIX}_{swarm_id}.dat"
+        )
 
         if not check_starting_file(
             starting_point_file, glowworms, use_anm, anm_rec, anm_lig
@@ -388,7 +391,7 @@ def parse_restraints_file(restraints_file_name):
                     elif (
                         parsed_restraint not in restraints["ligand"]["active"]
                         and parsed_restraint not in restraints["ligand"]["passive"]
-                        ):
+                    ):
                         if active:
                             restraints["ligand"]["active"].append(parsed_restraint)
                         elif passive:
